@@ -1,7 +1,7 @@
 import React from 'react'
-import ReactDom from 'react-dom'
+import * as ReactDOM from 'react-dom'
 
-class App extends React.Component {
+export default class App extends React.Component {
   render() {
     return (
       <div>This is App</div>
@@ -10,4 +10,6 @@ class App extends React.Component {
 }
 
 // 将 React 转为 dom 并挂载
-ReactDom.render(<App />, document.body)
+if (typeof window !== 'undefined') {
+  ReactDOM.hydrate(<App />, document.getElementById('root'))
+}

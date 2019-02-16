@@ -57,7 +57,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "/public";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 6);
@@ -524,6 +524,10 @@ module.exports = g;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(2);
@@ -532,7 +536,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__(10);
 
-var _reactDom2 = _interopRequireDefault(_reactDom);
+var ReactDOM = _interopRequireWildcard(_reactDom);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -568,7 +574,10 @@ var App = function (_React$Component) {
 // 将 React 转为 dom 并挂载
 
 
-_reactDom2.default.render(_react2.default.createElement(App, null), document.body);
+exports.default = App;
+if (typeof window !== 'undefined') {
+  ReactDOM.hydrate(_react2.default.createElement(App, null), document.getElementById('root'));
+}
 
 /***/ }),
 /* 7 */

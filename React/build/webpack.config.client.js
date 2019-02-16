@@ -8,7 +8,7 @@ module.exports = {
   output: {
     filename: '[name].[hash].js',
     path: path.join(__dirname, '../dist'),   // 输出文件的位置
-    publicPath: '' // 静态资源路径
+    publicPath: '/public' // 静态资源路径
   },
   module: {
     rules: [{
@@ -24,7 +24,7 @@ module.exports = {
       ],
     },
     {
-      test: /\.js$/,          // 对 jsx 后缀文件打包时，先用 babel-loader 转换一下
+      test: /\.js$/,          // 对 js 后缀文件打包时，先用 babel-loader 转换一下
       exclude: /node_modules/,
       use: [
         {
@@ -34,6 +34,8 @@ module.exports = {
     }]
   },
   plugins: [
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, '../client/template.html')
+    })
   ]
 }

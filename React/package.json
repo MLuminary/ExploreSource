@@ -4,8 +4,11 @@
   "description": "explore react",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config build/webpack.config.js"
+    "build:client": "webpack --config build/webpack.config.client.js",
+    "build:server": "webpack --config build/webpack.config.server.js",
+    "clean": "rimraf dist",
+    "build": "npm run clean && npm run build:client && npm run build:server",
+    "start": "node server/server.js"
   },
   "keywords": [
     "react",
@@ -22,9 +25,11 @@
     "babel-preset-react": "^6.24.1",
     "html-webpack-plugin": "^3.2.0",
     "react": "^16.8.1",
+    "rimraf": "^2.6.3",
     "webpack": "^3.6.0"
   },
   "dependencies": {
+    "express": "^4.16.4",
     "react-dom": "^16.8.1"
   }
 }
