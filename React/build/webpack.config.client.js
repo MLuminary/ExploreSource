@@ -1,14 +1,16 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+// webpack 适用于不同的环境
+const isDev = process.env.NODE_ENV === 'development'
 
-module.exports = {
+const config = {
   entry: {
     app: path.join(__dirname, '../client/app.jsx')
   },
   output: {
     filename: '[name].[hash].js',
     path: path.join(__dirname, '../dist'),   // 输出文件的位置
-    publicPath: '/public' // 静态资源路径
+    publicPath: '/public' // 静态资源路径,需要与服务端渲染区分开
   },
   module: {
     rules: [{
@@ -39,3 +41,25 @@ module.exports = {
     })
   ]
 }
+
+if (isDev) {
+  // 在 dist 目录下启动 localhost:8888/filename 就可以访问到
+  config.devServer = {
+    host: '0.0.0.0',
+    port: '8888',
+    // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要
+    contentBase: path.join(__dirname, '../dist'),
+    // hot: true,
+    // 出现错误显示
+    overlay: {
+      errors: true
+    },
+    publicPath: '/public',
+    historyApiFallback: {
+      index: '/public/index.html'
+    }
+  }
+}
+
+
+module.exports = config

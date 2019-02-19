@@ -8,7 +8,7 @@ module.exports = {
   output: {
     filename: 'server-entry.js',
     path: path.join(__dirname, '../dist'),   // 输出文件的位置
-    publicPath: '/public', // 静态资源路径
+    publicPath: '/public', // 静态资源路径,需要与服务端渲染区分开
     libraryTarget: 'commonjs2' // 使用最新的 commonjs 的加载方案
   },
   module: {
