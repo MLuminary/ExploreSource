@@ -11,6 +11,7 @@ const app = express()
 app.use('/public', express.static(path.join(__dirname, '../dist')))
 
 app.get('*', function(req, res){
+  // 获取到需要渲染的内容
   const _appString = ReactSSR.renderToString(serverEntry)
   const appString = template.replace('<app></app>', _appString)
   res.send(appString)

@@ -45,3 +45,11 @@ SEO 不友好，谷歌百度不会去执行 js 代码，抓取页面时只会是
 
 ```
 
+## 热加载
+
+```js
+module.hot // Property 'hot' does not exist on type 'NodeModule'. #5
+// need to install
+npm i @types/webpack-env
+```
+
