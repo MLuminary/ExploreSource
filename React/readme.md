@@ -53,3 +53,5 @@ module.hot // Property 'hot' does not exist on type 'NodeModule'. #5
 npm i @types/webpack-env
 ```
 
+## eslint
+

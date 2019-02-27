@@ -1,15 +1,15 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import App from './App/app.jsx'
-import { AppContainer } from 'react-hot-loader'
+import App from './App/app'
+import { AppContainer } from 'react-hot-loader' // eslint-disable-line
 
 const root = document.getElementById('root')
-const render = Component => {
+const render = (Component) => {
   ReactDOM.hydrate(
     <AppContainer>
       <Component />
     </AppContainer>,
-    root
+    root,
   )
 }
 
@@ -20,7 +20,7 @@ if (typeof window !== 'undefined') {
 
 if (module.hot) {
   module.hot.accept('./App/app.jsx', () => {
-    const NextApp = require('./App/app.jsx').default
+    const NextApp = require('./App/app.jsx').default // eslint-disable-line
     render(NextApp)
   })
 }

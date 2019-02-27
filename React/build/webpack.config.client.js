@@ -5,6 +5,7 @@ const webpack = require('webpack')
 const isDev = process.env.NODE_ENV === 'development'
 
 const config = {
+  resolve: {extensions: ['.js','.jsx']},
   entry: {
     app: path.join(__dirname, '../client/index.jsx')
   },
@@ -15,6 +16,14 @@ const config = {
   },
   module: {
     rules: [{
+      enforce: 'pre',
+      test: /\.(js|jsx)$/,
+      loader: 'eslint-loader',
+      exclude: [
+        path.resolve(__dirname, '../node_modules')
+      ]
+    },
+    {
       test: /\.jsx$/,          // 对 jsx 后缀文件打包时，先用 babel-loader 转换一下
       exclude: /node_modules/,
       use: [
