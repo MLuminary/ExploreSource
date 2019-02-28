@@ -1,56 +1,24 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const baseConfig = require('./webpack.config.base')
 const webpack = require('webpack')
+const webpackMerge = require('webpack-merge')
 // webpack 适用于不同的环境
 const isDev = process.env.NODE_ENV === 'development'
 
-const config = {
-  resolve: {extensions: ['.js','.jsx']},
+const config = webpackMerge(baseConfig, {
   entry: {
     app: path.join(__dirname, '../client/index.jsx')
   },
   output: {
-    filename: '[name].[hash].js',
-    path: path.join(__dirname, '../dist'),   // 输出文件的位置
-    publicPath: '/public/' // 静态资源路径,需要与服务端渲染区分开
-  },
-  module: {
-    rules: [{
-      enforce: 'pre',
-      test: /\.(js|jsx)$/,
-      loader: 'eslint-loader',
-      exclude: [
-        path.resolve(__dirname, '../node_modules')
-      ]
-    },
-    {
-      test: /\.jsx$/,          // 对 jsx 后缀文件打包时，先用 babel-loader 转换一下
-      exclude: /node_modules/,
-      use: [
-        {
-          loader: 'babel-loader',
-          options: {
-            presets: ['react']
-          }
-        }
-      ],
-    },
-    {
-      test: /\.js$/,          // 对 js 后缀文件打包时，先用 babel-loader 转换一下
-      exclude: /node_modules/,
-      use: [
-        {
-          loader: 'babel-loader'
-        }
-      ],
-    }]
+    filename: '[name].[hash].js'
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, '../client/template.html')
     })
   ]
-}
+})
 
 if (isDev) {
   config.mode = 'development'
