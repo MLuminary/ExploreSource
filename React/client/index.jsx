@@ -18,6 +18,7 @@ if (typeof window !== 'undefined') {
   render(App)
 }
 
+// 关于热加载
 if (module.hot) {
   module.hot.accept('./App/app.jsx', () => {
     const NextApp = require('./App/app.jsx').default // eslint-disable-line

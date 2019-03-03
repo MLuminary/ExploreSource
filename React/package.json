@@ -7,7 +7,7 @@
     "build:client": "webpack --config build/webpack.config.client.js",
     "build:server": "webpack --config build/webpack.config.server.js",
     "dev:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
-    "dev:server": "cross-env NODE_ENV=development node server/server.js",
+    "dev:server": "nodemon server/server.js",
     "clean": "rimraf dist",
     "build": "npm run clean && npm run build:client && npm run build:server"
   },
