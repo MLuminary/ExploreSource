@@ -50,11 +50,13 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "react": "^16.8.1",
     "@types/node": "^11.9.5",
     "@types/webpack-env": "^1.13.7",
     "axios": "^0.18.0",
     "express": "^4.16.4",
-    "react-dom": "^16.8.1"
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1"
   }
 }

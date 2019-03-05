@@ -21,6 +21,7 @@ const config = webpackMerge(baseConfig, {
 })
 
 if (isDev) {
+  config.mode = 'development'
   config.entry = {
     app: [
       'react-hot-loader/patch',

@@ -1,13 +1,17 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import App from './App/app'
 import { AppContainer } from 'react-hot-loader' // eslint-disable-line
+import { BrowserRouter } from 'react-router-dom'
+
+import App from './App/app'
 
 const root = document.getElementById('root')
 const render = (Component) => {
   ReactDOM.hydrate(
     <AppContainer>
-      <Component />
+      <BrowserRouter>
+        <Component />
+      </BrowserRouter>
     </AppContainer>,
     root,
   )
