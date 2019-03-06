@@ -1,17 +1,23 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader' // eslint-disable-line
+import { Provider } from 'mobx-react'
 import { BrowserRouter } from 'react-router-dom'
 
 import App from './App/app'
+import appState from './store/app-state'
 
 const root = document.getElementById('root')
 const render = (Component) => {
-  ReactDOM.hydrate(
+  // Warning: Expected server HTML to contain a matching <div> in <div>
+  const renderMethod = !module.hot ? ReactDOM.hydrate : ReactDOM.render
+  renderMethod(
     <AppContainer>
-      <BrowserRouter>
-        <Component />
-      </BrowserRouter>
+      <Provider appState={appState}>
+        <BrowserRouter>
+          <Component />
+        </BrowserRouter>
+      </Provider>
     </AppContainer>,
     root,
   )

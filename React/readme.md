@@ -60,3 +60,34 @@ npm i @types/webpack-env
 ## 路由
 
 路由是用来区分一个网站不同功能模块的地址，浏览器通过访问同一站点下的不同路由，来访问网站不用的功能。同样路由也让开发展区分返回的内容
+
+
+
+## Export 
+
+当 React 组件导出不用 `default` 时
+
+```js
+// topicList/topicList.jsx
+export const TopicList = () => {...}
+// topicList/index.jsx
+export * from './topicList'
+// router.jsx
+import { TopicList } from './topicList'
+                                
+```
+
+当 React 组件使用 `default` 时
+
+```js
+// topicList/topicList.jsx
+export default () => {...}
+// topicList/index.jsx
+export { default } from './topicList'
+// router.jsx
+import TopicList from './topicList'
+```
+
+## MobX
+
+只有一份数据，不会像 redux 产生新的数据

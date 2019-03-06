@@ -1,3 +1,3 @@
 import * as React from 'react'
 
-export default () => (<div>this is TopicList</div>)
+export const TopicList = () => (<div>this is TopicList</div>)
