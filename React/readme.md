@@ -91,3 +91,8 @@ import TopicList from './topicList'
 ## MobX
 
 只有一份数据，不会像 redux 产生新的数据
+
+ [`Mobx` 配置装饰器](https://cn.mobx.js.org/best/decorators.html)
+
+
+
