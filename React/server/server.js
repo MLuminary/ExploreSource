@@ -7,16 +7,17 @@ const ReactSSR = require('react-dom/server')
 const favicon = require('serve-favicon')
 
 const app = express()
-
+// 创建 application/json 解析
 app.use(bodyParser.json())
+// 创建 application/x-www-form-urlencoded 解析
 app.use(bodyParser.urlencoded({extended: false}))
 
 app.use(session({
   maxAge: 10 * 60 * 1000,
   name: 'tid',
-  resave: false,
-  saveUninitialized: false,
-  secret: 'react cnode class'
+  resave: false, // 是否每次都重新保存会话，建议false
+  saveUninitialized: false, // 是否自动保存未初始化的会话，建议false
+  secret: 'react cnode class' // 用来对session id相关的cookie进行签名
 }))
 
 app.use(favicon(path.join(__dirname, 'favicon.ico')))

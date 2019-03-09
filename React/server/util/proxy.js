@@ -1,5 +1,6 @@
 // 代理所有发向 cNode 的接口
-const axios= require('axios')
+const axios = require('axios')
+const querystring = require('querystring')
 
 const baseUrl = 'https://cnodejs.org/api/v1'
 
@@ -8,24 +9,28 @@ module.exports = function (req, res, next) {
   const user = req.session.user || {}
   const needAccessToken = req.query.needAccessToken
 
-  if(needAccessToken && user.accessToken) {
+  if(needAccessToken && !user.accessToken) {
     res.status(401).send({
       success: false,
       msg: 'need login'
     })
   }
 
-  const query = Object.assign({}, req.query)
+  const query = Object.assign({}, req.query, {
+    // 当请求方式为 get 但是还需要 accesstoken 时
+    accesstoken: needAccessToken && req.method === 'GET' ? user.accessToken : ''
+  })
   if(query.needAccessToken) delete query.needAccessToken
 
   axios(`${baseUrl}${path}`, {
     method: req.method,
     params: query,
-    data: Object.assign({}, req.body, {
-      accesstoken: user.accessToken
-    }),
+    data: querystring.stringify(Object.assign({}, req.body, {
+      // 当请求方式为 Post 时才需要再 body 中传 accessToken
+      accesstoken: ( needAccessToken && req.method === 'POST' ) ? user.accessToken : ''
+    })),
     headers: {
-      'ContentType': 'application/x-www-form-urlencode'
+      'ContentType': 'application/x-www-form-urlencoded'
     }
   }).then(resp => {
     if(resp.status === 200) {

@@ -10,7 +10,7 @@ router.post('/login', function (req, res, next) {
     .then(resp => {
       if(resp.status === 200 && resp.data.success) {
         req.session.user = {
-          accessToken: resp.body.accessToken,
+          accessToken: req.body.accessToken,
           loginName: resp.data.loginName,
           id: resp.data.id,
           avatarUrl: resp.data.avatarUrl
@@ -25,7 +25,7 @@ router.post('/login', function (req, res, next) {
       if(err.response) {
         res.json({
           success: false,
-          data: err.response
+          data: err.response.data  // 只传 response 太大，无法解析
         })
       } else {
         next(err)
