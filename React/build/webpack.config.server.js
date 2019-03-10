@@ -8,6 +8,7 @@ module.exports = webpackMerge(baseConfig, {
   entry: {
     app: path.join(__dirname, '../client/server-entry.jsx')
   },
+  externals: Object.keys(require('../package').dependencies),
   output: {
     filename: 'server-entry.js',
     libraryTarget: 'commonjs2' // 使用最新的 commonjs 的加载方案
