@@ -1,13 +1,9 @@
 const axios = require('axios')
 const path = require('path')
-const ejs = require('ejs')
 const webpack = require('webpack')
 const MemoryFs = require('memory-fs')
-const ReactDOMServer = require('react-dom/server')
 const proxy = require('http-proxy-middleware')
-const serialize = require('serialize-javascript')
-const bootstrapper = require('react-async-bootstrapper')
-const { Helmet } = require('react-helmet')
+const serverRender = require('./server-render')
 
 const serverConfig = require('../../build/webpack.config.server')
 // 要启动 npm run dev:client 然后获取 template 页面
@@ -19,13 +15,6 @@ const getTemplate = () => {
       })
       .catch(reject)
   })
-}
-
-const getStoreState = (stores) => {
-  return Object.keys(stores).reduce((result, storeName) => {
-    result[storeName] = stores[storeName].toJson()
-    return result
-  }, {})
 }
 
 const NativeModule = require('module')
@@ -68,8 +57,7 @@ serverCompiler.watch({}, (err, stats) => {
   // m._compile(bundle, 'server-entry.js') // 设置了 externals 后，包的体积减少了，但是这里无法用 require 获取到依赖
   const m = getModuleFromString(bundle, 'server-entry.js')
   // 导出来的模板文件
-  serverBundle = m.exports.default
-  createStoreMap = m.exports.createStoreMap
+  serverBundle = m.exports
 })
 
 module.exports = function(app) {
@@ -78,37 +66,12 @@ module.exports = function(app) {
     target: 'http://localhost:8888'
   }))
 
-  app.get('*', function(req, res) {
+  app.get('*', function(req, res, next) {
+    if(!serverBundle) {
+      return res.send('waiting for compile, refresh later')
+    }
     getTemplate().then(template => {
-
-      const routerContext = {}
-      const stores = createStoreMap()
-      // 根据 url 返回不同的内容
-      const app = serverBundle(stores, routerContext, req.url)
-      // 异步，此时可以拿到 routerContext
-      bootstrapper(app).then(() => {
-        // 有这个属性的话在服务端直接重定向, renderToSring 后会拿到 routerContext
-        if(routerContext.url) {
-          res.status(302).setHeader('Location', routerContext.url)
-          res.end()
-          return
-        }
-        // 当前客户端 state
-        const state = getStoreState(stores)
-        const content = ReactDOMServer.renderToString(app)
-        const helmet = Helmet.renderStatic() // 拿到在客户端用 helmet 定义的头部信息
-
-        const html = ejs.render(template, {
-          appString: content,
-          initialState: serialize(state),
-          meta: helmet.meta.toString(),
-          title: helmet.title.toString(),
-          style: helmet.style.toString(),
-          link: helmet.link.toString()
-        })
-        res.send(html)
-        // res.send(template.replace('<!-- app -->', content))
-      })
-    })
+      return serverRender(serverBundle, template, req, res)
+    }).catch(next)
   })
 }
