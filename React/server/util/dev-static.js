@@ -1,20 +1,30 @@
 const axios = require('axios')
 const path = require('path')
+const ejs = require('ejs')
 const webpack = require('webpack')
 const MemoryFs = require('memory-fs')
 const ReactDOMServer = require('react-dom/server')
 const proxy = require('http-proxy-middleware')
+const serialize = require('serialize-javascript')
+const bootstrapper = require('react-async-bootstrapper')
 
 const serverConfig = require('../../build/webpack.config.server')
 // 要启动 npm run dev:client 然后获取 template 页面
 const getTemplate = () => {
   return new Promise((resolve, reject) => {
-    axios.get('http://localhost:8888/public/index.html')
+    axios.get('http://localhost:8888/public/server.ejs')
       .then(res => {
         resolve(res.data)
       })
       .catch(reject)
   })
+}
+
+const getStoreState = (stores) => {
+  return Object.keys(stores).reduce((result, storeName) => {
+    result[storeName] = stores[storeName].toJson()
+    return result
+  }, {})
 }
 
 const Module = module.constructor
@@ -23,7 +33,7 @@ const mfs = new MemoryFs() // 让 fs 去内存中拿文件
 const serverCompiler = webpack(serverConfig)
 // 将原本的 fs 读取改为 mfs
 serverCompiler.outputFileSystem = mfs
-let serverBundle
+let serverBundle, createStoreMap
 // 监听文件重新去打包
 serverCompiler.watch({}, (err, stats) => {
   if(err) throw err
@@ -42,6 +52,7 @@ serverCompiler.watch({}, (err, stats) => {
   m._compile(bundle, 'server-entry.js')
   // 导出来的模板文件
   serverBundle = m.exports.default
+  createStoreMap = m.exports.createStoreMap
 })
 
 module.exports = function(app) {
@@ -52,8 +63,30 @@ module.exports = function(app) {
 
   app.get('*', function(req, res) {
     getTemplate().then(template => {
-      const content = ReactDOMServer.renderToString(serverBundle)
-      res.send(template.replace('<!-- app -->', content))
+
+      const routerContext = {}
+      const stores = createStoreMap()
+      // 根据 url 返回不同的内容
+      const app = serverBundle(stores, routerContext, req.url)
+      // 异步，此时可以拿到 routerContext
+      bootstrapper(app).then(() => {
+        // 有这个属性的话在服务端直接重定向, renderToSring 后会拿到 routerContext
+        if(routerContext.url) {
+          res.status(302).setHeader('Location', routerContext.url)
+          res.end()
+          return
+        }
+        // 当前客户端 state
+        const state = getStoreState(stores)
+        const content = ReactDOMServer.renderToString(app)
+
+        const html = ejs.render(template, {
+          appString: content,
+          initialState: serialize(state)
+        })
+        res.send(html)
+        // res.send(template.replace('<!-- app -->', content))
+      })
     })
   })
 }

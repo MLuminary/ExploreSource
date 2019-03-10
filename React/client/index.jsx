@@ -5,7 +5,10 @@ import { Provider } from 'mobx-react'
 import { BrowserRouter } from 'react-router-dom'
 
 import App from './App/app'
-import appState from './store/app-state'
+import AppState from './store/app-state'
+
+// 获取到服务端传递过来的数据
+const initialState = window.__INITIAL__STATE__ || {} // eslint-disable-line
 
 const root = document.getElementById('root')
 const render = (Component) => {
@@ -13,7 +16,7 @@ const render = (Component) => {
   const renderMethod = !module.hot ? ReactDOM.hydrate : ReactDOM.render
   renderMethod(
     <AppContainer>
-      <Provider appState={appState}>
+      <Provider appState={new AppState(initialState.appState)}>
         <BrowserRouter>
           <Component />
         </BrowserRouter>
