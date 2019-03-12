@@ -7,7 +7,8 @@ module.exports = {
     publicPath: '/public/' // 静态资源路径,需要与服务端渲染区分开
   },
   module: {
-    rules: [{
+    rules: [
+      {
       enforce: 'pre',
       test: /\.(js|jsx)$/,
       loader: 'eslint-loader',
@@ -35,6 +36,11 @@ module.exports = {
             loader: 'babel-loader'
           }
         ],
-      }]
+      },
+      {
+        test: /\.ejs$/,
+        loader: 'compile-ejs-loader'
+      }
+    ]
   }
 }
