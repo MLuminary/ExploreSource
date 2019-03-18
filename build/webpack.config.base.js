@@ -2,6 +2,7 @@ const path = require('path')
 
 module.exports = {
   resolve: { extensions: ['.js','.jsx'] },
+  mode: process.env.NODE_ENV || 'development',
   output: {
     path: path.join(__dirname, '../dist'),   // 输出文件的位置
     publicPath: '/public/' // 静态资源路径,需要与服务端渲染区分开

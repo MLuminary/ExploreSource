@@ -99,5 +99,19 @@ import TopicList from './topicList'
 
  [`Mobx` 配置装饰器](https://cn.mobx.js.org/best/decorators.html)
 
+## React 16
+
+Error boundary
+
+```js
+componentDidCatch(err, errorInfo) {
+    // catch errors in any components below
+    this.setState({
+        error: error,
+        errorInfo: errorInfo
+    })
+}
+```
+
 
 
