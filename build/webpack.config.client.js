@@ -25,6 +25,7 @@ const config = webpackMerge(baseConfig, {
 })
 
 if (isDev) {
+  config.devtool = '#cheap-module-eval-source-map'
   config.mode = 'development'
   config.entry = {
     app: [
@@ -37,7 +38,7 @@ if (isDev) {
     host: '0.0.0.0',
     port: '8888',
     // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要
-    contentBase: path.join(__dirname, '../dist'),
+    // contentBase: path.join(__dirname, '../dist'),
     hot: true,
     // 出现错误显示
     overlay: {
