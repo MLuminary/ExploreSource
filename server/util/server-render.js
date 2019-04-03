@@ -34,8 +34,8 @@ module.exports = (bundle, template, req, res) => {
         type: 'light'
       },
       typography: {
-        useNextVariants: true,
-      },
+        useNextVariants: true
+      }
     })
     const generateClassName = createGenerateClassName()
 

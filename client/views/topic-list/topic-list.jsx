@@ -6,16 +6,24 @@ import { Tabs, Tab } from '@material-ui/core'
 
 import Container from '../layout/container'
 import AppState from '../../store/app-state'
+import { TopicListItem } from './list'
 
 @inject('appState') @observer
 export class TopicList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      tabIndex: 0
+      tabIndex: 0,
+      topic: {
+        tab: 'game',
+        title: 'This is title',
+        username: 'hutchins',
+        reply_count: 20,
+        visit_count: 30,
+        create_at: 'dwdwd'
+      }
     }
   }
-
 
   componentDidMount() {
     // do
@@ -23,6 +31,10 @@ export class TopicList extends React.Component {
 
   changeTab = (e, index) => {
     this.setState({ tabIndex: index })
+  }
+
+  ListItemClick = () => {
+
   }
 
   // 服务端调用 asyncBootstrap 时会在此同时执行此方法
@@ -38,7 +50,7 @@ export class TopicList extends React.Component {
   }
 
   render() {
-    const { tabIndex } = this.state
+    const { tabIndex, topic } = this.state
     return (
       <Container>
         <Helmet>
@@ -53,6 +65,7 @@ export class TopicList extends React.Component {
           <Tab label="招聘" />
           <Tab label="测试" />
         </Tabs>
+        <TopicListItem onClick={this.ListItemClick} topic={topic} />
       </Container>
     )
   }
